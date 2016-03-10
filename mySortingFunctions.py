@@ -1,6 +1,6 @@
-# Name: Write Your Name Here
-# Email: Your Email
-# SUID: Your Student ID
+# Name: Brandon Barrett
+# Email: barretbj@colorado.edu
+# SUID: 810-05-1814
 #
 # By submitting this file as my own work, I declare that this
 # code has been written on my own with no unauthorized help. I agree to the
@@ -17,19 +17,18 @@ import time
 # Helper function for insertionSort
 def getPosition(rList, elt):
     # Find the position where element occurs in the list
-    #
     for (i,e) in enumerate(rList):
         if (e >= elt):
             return i
     return len(rList)
 
-# Implementation of Insertion Sort 
+# Implementation of Insertion Sort
 def insertionSort(lst):
     n = len(lst)
     retList = []
     for i in lst:
         pos = getPosition(retList,i)
-        retList.insert(pos,i)    
+        retList.insert(pos,i)
     return retList
 
 #------ Merge Sort --------------
@@ -47,7 +46,7 @@ def quickSort(lst):
     # But the function to do quicksort should be called quickSort
 
     return lst # TODO: change this
-    
+
 
 
 # ------ Timing Utility Functions ---------
@@ -75,6 +74,3 @@ def measureRunningTimeComplexity(sortFunction,lst):
 # --- TODO
 
 # Write code to extract average/worst-case time complexity for your sorting routines.
-
-
-

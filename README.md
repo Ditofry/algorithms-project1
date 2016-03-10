@@ -7,11 +7,11 @@ The assignment asks you to write and perform an empirical complexity analysis of
  - Merge sort (please write the recursive merge sort)
  - Quick sort (please write a randomized quicksort method as covered in class).
 
-# Task #1
+## Task #1
 Fill in the implementation of mergeSort and quickSort in the mySortingFunctions.py
 Use the given grading script to check that your functions work.
 
-# Task #2
+## Task #2
 Empirically estimate the average and worst case running time for each sorting function. Specifically write Python code that
 
 1. Creates a randomly shuffled list of size n (see the function generateRandomList(n) already implemented in mySortingFunctions.py )
@@ -26,7 +26,7 @@ Empirically estimate the average and worst case running time for each sorting fu
 
 4. Plot for each sorting function a graph that shows n on the x-axis and average/worst-case times on the y-axis.
 
-# Submission
+## Submission
 The ZIP file should be named `<yourlastname>.<yourfirstname>.prog1.zip`
 
 The ZIP should extract the following files (zip should NOT contain folders in it, it will make our grading harder).
