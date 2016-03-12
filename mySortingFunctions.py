@@ -90,12 +90,12 @@ def divideConquer(lst, first, last):
         divideConquer(lst, split + 1, last)
 
 def partition(lst, first, last):
-    # since list is random, we can use first item as a pivot strategy
-    pivot = lst[first]
     left = first + 1
     right = last
-    done = False
+    # since list is random, we can use first item as a pivot strategy
+    pivot = lst[first]
 
+    done = False
     while not done:
         # Move until we exceed left val
         while left <= right and lst[left] <= pivot:
