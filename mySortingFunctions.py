@@ -7,10 +7,12 @@
 # CU Honor Code. I am also aware that plagiarizing code may result in
 # a failing grade for this class.
 from __future__ import print_function
+from PIL import Image
 import sys
 import random
+import numpy as np
 import time
-
+import matplotlib.pyplot as plt
 
 # --------- Insertion Sort -------------
 # Implementation of getPosition
@@ -33,21 +35,78 @@ def insertionSort(lst):
 
 #------ Merge Sort --------------
 def mergeSort(lst):
-    # TODO: Implement mergesort here
-    # You can add additional utility functions to help you out.
-    # But the function to do mergesort should be called mergeSort
+    if len(lst) > 1:
+        mid = len(lst) // 2 # C-style division with truncation
+        # Gotta love python
+        left = lst[:mid]
+        right = lst[mid:]
+        # Divide and Conquer
+        mergeSort(left)
+        mergeSort(right)
+        return combineLists(lst, left, right) # return sorted lists
+    return lst # if the list is len == 1 then its trivially sorted
 
-    return lst # TODO: change this
+def combineLists(lst, left, right):
+    i, j, k = 0, 0, 0
+    # This is where we merge our lists, itterating through the smallest
+    # values and adding them to the returned lst
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            lst[k] = left[i]
+            i += 1
+        else:
+            lst[k] = right[j]
+            j += 1
+        k += 1
+
+    while i < len(left):
+        lst[k] = left[i]
+        i += 1
+        k += 1
+
+    while j < len(right):
+        lst[k] = right[j]
+        j += 1
+        k += 1
+    return lst
 
 #------ Quick Sort --------------
 def quickSort(lst):
-    # TODO: Implement quicksort here
-    # You may add additional utility functions to help you out.
-    # But the function to do quicksort should be called quickSort
+    divideConquer(lst, 0, len(lst) - 1)
+    return lst
 
-    return lst # TODO: change this
+def divideConquer(lst, first, last):
+   if first < last:
+       split = partition(lst, first, last)
+       divideConquer(lst, first, split - 1)
+       divideConquer(lst, split + 1, last)
 
+def partition(lst, first, last):
+    # since list is random, we can use first item as a pivot strategy
+   pivot = lst[first]
+   left = first + 1
+   right = last
+   done = False
 
+   while not done:
+       while left <= right and lst[left] <= pivot:
+           left = left + 1
+
+       while lst[right] >= pivot and right >= left:
+           right = right - 1
+
+       if right < left:
+           done = True
+       else:
+           tmp = lst[left]
+           lst[left] = lst[right]
+           lst[right] = tmp
+
+   tmp = lst[first]
+   lst[first] = lst[right]
+   lst[right] = tmp
+
+   return right
 
 # ------ Timing Utility Functions ---------
 
@@ -63,14 +122,52 @@ def generateRandomList(n):
    random.shuffle(lst)
    return lst
 
-
 def measureRunningTimeComplexity(sortFunction,lst):
     t0 = time.clock()
     sortFunction(lst)
     t1 = time.clock() # A rather crude way to time the process.
     return (t1 - t0)
 
+def analyzeRuntimeComplexity(lowBound, highBound):
+    functionStore = {
+        'mergeSort': mergeSort,
+        'quickSort': quickSort,
+        'insertionSort': insertionSort
+    }
 
-# --- TODO
+    for fnc in ['mergeSort','quickSort','insertionSort']:
+        nValues = []
+        avgVals = []
+        worstAvgVals = []
+        worstVals = []
+        sampleSize = 20
+        for n in range(lowBound, highBound, 5):
+            # Compute average running time over randomly generated lists of size n
+            avgCaseComplexity = 0
+            worstAvgComplexity = 0
+            for i in range(sampleSize * n):
+                testList = generateRandomList(n)
+                runningTime = measureRunningTimeComplexity(functionStore[fnc], testList)
+                avgCaseComplexity += runningTime
+                # keep it if we have a new high
+                worstAvgComplexity = max(worstAvgComplexity, runningTime)
 
-# Write code to extract average/worst-case time complexity for your sorting routines.
+            # Keep track of our iteration for x-axis
+            nValues.append(n)
+            # Find our averages
+            avgVals.append(avgCaseComplexity / (sampleSize * n))
+            worstAvgVals.append(worstAvgComplexity)
+
+        # Take care of our plotting
+        plt.plot(nValues, avgVals, 'g', nValues, worstAvgVals, 'r')
+        plt.legend(['average', 'worst average'], loc='upper left')
+        plt.ylabel('Running Time')
+        plt.xlabel('list size')
+
+        functionName = fnc + '.png'
+        # Save figure
+        plt.savefig(functionName)
+        # If we don't clear the figure then we'll see previous fnc data
+        # on this plot
+        plt.clf()
+        Image.open(functionName).save(fnc + '.jpg','JPEG')
