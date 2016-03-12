@@ -77,6 +77,8 @@ def quickSort(lst):
     divideConquer(lst, 0, len(lst) - 1)
     return lst
 
+# SITATION: I got the idea for this design pattern at
+# https://en.wikipedia.org/wiki/Quicksort, although my implementation is still different
 def divideConquer(lst, first, last):
     # if first == last then it's trivially sorted
     if first < last:
