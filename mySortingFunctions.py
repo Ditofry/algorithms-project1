@@ -72,41 +72,50 @@ def combineLists(lst, left, right):
 
 #------ Quick Sort --------------
 def quickSort(lst):
+    # just abstract the divide and conquer so that we only need to
+    # pass a single argument to the quickSort function
     divideConquer(lst, 0, len(lst) - 1)
     return lst
 
 def divideConquer(lst, first, last):
-   if first < last:
-       split = partition(lst, first, last)
-       divideConquer(lst, first, split - 1)
-       divideConquer(lst, split + 1, last)
+    # if first == last then it's trivially sorted
+    if first < last:
+        # Loosely sort around pivot and return new pivot
+        split = partition(lst, first, last)
+        # Recurse left side
+        divideConquer(lst, first, split - 1)
+        # recurse right side
+        divideConquer(lst, split + 1, last)
 
 def partition(lst, first, last):
     # since list is random, we can use first item as a pivot strategy
-   pivot = lst[first]
-   left = first + 1
-   right = last
-   done = False
+    pivot = lst[first]
+    left = first + 1
+    right = last
+    done = False
 
-   while not done:
-       while left <= right and lst[left] <= pivot:
-           left = left + 1
+    while not done:
+        # Move until we exceed left val
+        while left <= right and lst[left] <= pivot:
+            left = left + 1
 
-       while lst[right] >= pivot and right >= left:
-           right = right - 1
+        # Move right inward
+        while lst[right] >= pivot and right >= left:
+            right = right - 1
+        # We've gone as far as we need
+        if right < left:
+            done = True
+        else:
+            # Switch left and right
+            tmp = lst[left]
+            lst[left] = lst[right]
+            lst[right] = tmp
 
-       if right < left:
-           done = True
-       else:
-           tmp = lst[left]
-           lst[left] = lst[right]
-           lst[right] = tmp
-
-   tmp = lst[first]
-   lst[first] = lst[right]
-   lst[right] = tmp
-
-   return right
+    tmp = lst[first]
+    lst[first] = lst[right]
+    lst[right] = tmp
+    # New pivot point
+    return right
 
 # ------ Timing Utility Functions ---------
 
